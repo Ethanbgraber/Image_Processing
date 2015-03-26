@@ -1,3 +1,6 @@
+// Author: https ://gist.github.com/xuhdev/4500925
+// including the cout in main to view the matrix 	
+
 #include "IP.h"
 #include <istream>
 #include <string>
