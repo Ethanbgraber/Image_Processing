@@ -1,4 +1,4 @@
-//#include "IP.h"
+#include "IP.h"
 #include <istream>
 #include <string>
 #include <sstream>
