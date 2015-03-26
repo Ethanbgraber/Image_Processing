@@ -1,4 +1,5 @@
 #include "IP.h"
+//#include "ascii_file_float.cpp"
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -11,7 +12,7 @@ using namespace std;
 void convolve(imageP, kernelP, imageP);
 void cbuf(uchar**, imageP, int, int, int);
 void fillPaddedBuffer(uchar*, int, uchar*, int, int);
-kernelP readKernel(string);
+//kernelP readKernel(string);
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,7 +25,7 @@ int main(int argc, char** argv)
 
 
 	imageP    I1, I2;
-	string infile;
+	//string infile;
 	kernelP kernel;
 
 	// error checking: proper usage
@@ -38,8 +39,28 @@ int main(int argc, char** argv)
 	I2 = NEWIMAGE;
 
 	// read xsize and ysize
-	kernel = readKernel(argv[2]);
+	//kernel = kP_readkernel(argv[2]);
+	//kernel = kP_readkernel(argv[2]);
+	//for (int i = 0; i < 20; i++){
+	//	cout << kernel->kernel[i] << endl;
+	//}
+	
+	std::ifstream is(argv[2]);
 
+	std::vector< std::vector<double> > matrix;
+	load_matrix(&is, &matrix," \t");
+	cout << "The matrix is:" << endl;
+	
+	int matrixtemp = 0;
+	for (std::vector< std::vector<double> >::const_iterator it = matrix.begin(); it != matrix.end(); ++it)
+	{
+		for (std::vector<double>::const_iterator itit = it->begin(); itit != it->end(); ++itit)
+			cout << *itit << '\t';
+		//matrix[matrixtemp++] = it;
+		cout << endl;
+	}
+	
+	
 	// call convolve and save result in file
 	convolve(I1, kernel, I2);
 	IP_saveImage(I2, argv[3]);
@@ -52,6 +73,7 @@ int main(int argc, char** argv)
 }
 
 void convolve(imageP I1, kernelP kernel, imageP I2) {
+	float *kernel_buffer;
 
 	// total number of pixels in image
 	int total = I1->width * I1->height;
@@ -65,10 +87,17 @@ void convolve(imageP I1, kernelP kernel, imageP I2) {
 		cerr << "blur: insufficient memory\n";
 		exit(1);
 	}
+	//
+	kernel_buffer = kernel->kernel;
+	//cout << kernel->kernel;
+	//for (int i = 0; i < 20; ++i){
+	//	float y = atof(kernel_buffer[i]); << endl;
+	//}
 
 
 	// init variables
-	int i, j, currentRow, currentCol, sum, temp;
+	int i, j, currentRow, currentCol, sum;
+	float temp;
 	int	padsz = (kernel->width - 1) / 2;
 	int medianIndex = (kernel->width*kernel->height - 1) / 2;
 
@@ -84,6 +113,7 @@ void convolve(imageP I1, kernelP kernel, imageP I2) {
 	for (i = 0; i < I2->width*I2->height; ++i){
 		I2->image[i] = 0;
 	}
+	float tempa[9] = { -1, -1, -2, -1, 8, -1, -1, -1, -2 };
 
 	// run the kernel over the circular buffer
 	for (currentRow = 0; currentRow < I1->height; ++currentRow) {
@@ -93,10 +123,14 @@ void convolve(imageP I1, kernelP kernel, imageP I2) {
 			//medianVector.clear();
 			//sum = 0;
 			for (i = 0; i < kernel->height; ++i) {
+				int kernel_count = 0;
+				temp = 0;
 				for (j = -padsz; j <= padsz; ++j) {
 					//medianVector.push_back(buffer[i][j + currentCol + padsz]);
-//					I2->image[currentRow*I1->width + currentCol] += kernel->kernel[correct point] * buffer[i][j + currentCol + padsz];
+					temp += tempa[kernel_count++] * buffer[i][j + currentCol + padsz];
 				}
+				I2->image[currentRow*I1->width + currentCol] = temp;
+				
 			}
 		}
 	}
@@ -155,7 +189,7 @@ void fillPaddedBuffer(uchar *buffer, int bsz, uchar *in, int insz, int pad)
 		buffer[pad + i] = in[i]; // insert in[] into buffer[] in between padding
 	}
 }
-
+/*
 kernelP readKernel(string filename) {
 	int w, h;
 	char c;
@@ -175,3 +209,4 @@ kernelP readKernel(string filename) {
 	getchar();
 	return 0;
 }
+*/

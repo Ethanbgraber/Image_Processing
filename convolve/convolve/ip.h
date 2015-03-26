@@ -12,6 +12,8 @@
 #include <cmath>
 #include <cstring>
 #include <cstdlib>
+#include <vector>
+
 
 #define MaxGray		255
 #define MXGRAY		256
@@ -47,3 +49,12 @@ extern imageP	IP_readImage(char *);
 extern void	IP_saveImage(imageP, char*);
 extern imageP	IP_allocImage(int, int, int);
 extern void	IP_freeImage(imageP);
+
+extern kernelP	kP_readkernel(char *);
+extern kernelP kP_allockernel(int, int, int);
+//extern kernelP	kP_allocImage(int, int, int);
+extern void	kP_freekernel(kernelP);
+
+extern void load_matrix(std::istream*,
+	std::vector< std::vector<double> >*,
+	const std::string&);

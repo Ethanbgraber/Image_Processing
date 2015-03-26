@@ -64,7 +64,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ascii_file_float.cpp" />
     <ClCompile Include="convolve.cpp" />
+    <ClCompile Include="Kernelutil.cpp" />
     <ClCompile Include="Iputil.cpp" />
   </ItemGroup>
   <ItemGroup>

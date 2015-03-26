@@ -21,6 +21,12 @@
     <ClCompile Include="Iputil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Kernelutil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ascii_file_float.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ip.h">
